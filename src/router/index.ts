@@ -12,7 +12,14 @@ const router = createRouter({
       component: DashboardLayout,
       meta: {
         isRequiresAuth: true
-      }
+      },
+      children: [
+        {
+          path: '/me',
+          name: 'me',
+          component: () => import('../views/Functions/Me/YourProfile.vue')
+        }
+      ]
     },
     {
       path: '/login',
@@ -37,14 +44,16 @@ router.beforeEach(async (to, from, next) => {
     store.setGlobalLoading(true)
   }
   await auth.authStateReady()
-  if (to.meta.isRequiresAuth && !auth.currentUser) {
+  const user = auth.currentUser
+  console.log(user)
+  if (to.meta.isRequiresAuth && !user) {
     next({ path: '/login' })
     return
   }
-  if (auth.currentUser) {
-    const idTokenResult = await auth.currentUser.getIdTokenResult()
+  if (user) {
+    const idTokenResult = await user.getIdTokenResult()
     if (new Date(idTokenResult.expirationTime) < new Date()) {
-      await auth.currentUser.getIdToken(true)
+      await user.getIdToken(true)
     }
     if (to.name === 'login' || to.name === 'register') {
       next({ path: from.path })

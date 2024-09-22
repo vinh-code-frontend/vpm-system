@@ -7,7 +7,9 @@ import TopbarVue from '@/components/Topbar/TopbarVue.vue'
   <topbar-vue />
   <div class="flex">
     <left-menu />
-    <div>Dashboard</div>
+    <div class="px-5 py-3 flex-1">
+      <router-view />
+    </div>
   </div>
 </template>
 
