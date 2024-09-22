@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp, type FirebaseApp } from 'firebase/app'
-import { getAnalytics, type Analytics } from 'firebase/analytics'
-import { getAuth, type Auth } from 'firebase/auth'
+import { initializeApp } from 'firebase/app'
+// import { getAnalytics } from 'firebase/analytics'
+import { getAuth } from 'firebase/auth'
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_apiKey,
@@ -13,24 +13,9 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_measurementId
 }
 
-class Firebase {
-  private app: FirebaseApp
-  private auth: Auth
-  private analytics: Analytics | null = null
-  constructor() {
-    this.app = initializeApp(firebaseConfig)
-    this.auth = getAuth(this.app)
-    //this.analytics = getAnalytics(this.app)
-  }
-  public getApp() {
-    return this.app
-  }
-  public getAuth() {
-    return this.auth
-  }
-  public getAnalytics() {
-    return this.analytics
-  }
-}
+const app = initializeApp(firebaseConfig)
 
-export default new Firebase()
+export const auth = getAuth(app)
+// export const analytics = getAnalytics(app)
+
+export default app

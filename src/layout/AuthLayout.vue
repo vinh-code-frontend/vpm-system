@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>About</div>
+  <div>Auth</div>
 </template>
 
 <style scoped lang="scss"></style>

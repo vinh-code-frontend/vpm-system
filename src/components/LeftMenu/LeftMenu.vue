@@ -1,7 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div>Home</div>
+  <div>leftMenu</div>
 </template>
 
 <style scoped lang="scss"></style>
