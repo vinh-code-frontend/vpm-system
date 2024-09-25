@@ -17,7 +17,17 @@ const router = createRouter({
         {
           path: '/me',
           name: 'me',
-          component: () => import('../views/Functions/Me/YourProfile.vue')
+          component: () => import('../views/User/YourProfile.vue')
+        },
+        {
+          path: '/settings',
+          name: 'settings',
+          component: () => import('../views/User/UserSetting.vue')
+        },
+        {
+          path: '/user-management',
+          name: 'user-management',
+          component: () => import('../views/Setting/UserManagement/UserManagement.vue')
         }
       ]
     },

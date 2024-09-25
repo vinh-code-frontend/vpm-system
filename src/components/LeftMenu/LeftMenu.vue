@@ -1,80 +1,23 @@
 <script setup lang="ts">
-import { ElScrollbar, ElMenu, ElMenuItem } from 'element-plus'
+import { ElScrollbar, ElMenu, ElMenuItem, ElIcon } from 'element-plus'
 </script>
 
 <template>
-  <el-scrollbar class="!h-[calc(100vh-var(--header-height))]">
-    <el-menu default-active="2" class="el-menu-vertical-demo">
-      <el-menu-item index="1">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="2">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="3">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <template #title>Navigator Four</template>
-      </el-menu-item>
-    </el-menu>
-  </el-scrollbar>
+  <div class="border-[--el-border-color] border-r border-solid">
+    <h3 class="font-playpen-600 px-[--el-menu-level-padding] leading-[--header-height]">VPM System</h3>
+    <el-scrollbar class="!h-[calc(100vh-var(--header-height))]">
+      <el-menu default-active="/" class="!border-0" router>
+        <el-menu-item index="/">
+          <el-icon><setting /></el-icon>
+          <template #title>Navigator Four</template>
+        </el-menu-item>
+        <el-menu-item index="user-management">
+          <el-icon><Lock /></el-icon>
+          <template #title>User Management</template>
+        </el-menu-item>
+      </el-menu>
+    </el-scrollbar>
+  </div>
 </template>
 
 <style scoped lang="scss"></style>

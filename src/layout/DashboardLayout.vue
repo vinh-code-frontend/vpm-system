@@ -4,11 +4,13 @@ import TopbarVue from '@/components/Topbar/TopbarVue.vue'
 </script>
 
 <template>
-  <topbar-vue />
   <div class="flex">
     <left-menu />
-    <div class="px-5 py-3 flex-1">
-      <router-view />
+    <div class="px-4 flex-1 bg-slate-50">
+      <topbar-vue />
+      <div class="py-3">
+        <router-view />
+      </div>
     </div>
   </div>
 </template>

@@ -34,7 +34,7 @@ const onLogOut = async () => {
               <router-link to="/me" @click="onDropdownClicked">Your profile</router-link>
             </el-dropdown-item>
             <el-dropdown-item :icon="Setting">
-              <router-link to="/me" @click="onDropdownClicked">Settings</router-link>
+              <router-link to="/settings" @click="onDropdownClicked">Settings</router-link>
             </el-dropdown-item>
             <el-dropdown-item divided :icon="SwitchButton" @click="onLogOut">Log out</el-dropdown-item>
           </el-dropdown-menu>
