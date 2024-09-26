@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { auth } from '@/firebase'
-import { isEmail, isRequired, minCharacters, resetForm } from '@/utils/validator'
+import { isEmail, isRequired, minCharacters, resetForm } from '@/hooks/useValidator'
 import { ElForm, ElFormItem, ElInput, type FormInstance, type FormRules, ElButton } from 'element-plus'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { reactive, ref } from 'vue'

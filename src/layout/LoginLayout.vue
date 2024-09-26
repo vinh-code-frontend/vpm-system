@@ -1,17 +1,20 @@
 <script setup lang="ts">
 import { auth } from '@/firebase'
-import { isEmail, isRequired, minCharacters, resetForm } from '@/utils/validator'
-import { ElForm, ElFormItem, ElInput, type FormInstance, type FormRules, ElButton } from 'element-plus'
+import { useValidator } from '@/hooks'
+import { ElForm, ElFormItem, ElInput, type FormInstance, type FormRules, ElButton, vLoading } from 'element-plus'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { resetForm } from '@/utils/form'
 
 type SignInModel = {
   email: string
   password: string
 }
 const router = useRouter()
+const { required, email, min } = useValidator()
 
+const loading = ref(false)
 const formInstance = ref<FormInstance>()
 
 const formModel = reactive<SignInModel>({
@@ -20,24 +23,31 @@ const formModel = reactive<SignInModel>({
 })
 
 const rules = reactive<FormRules<SignInModel>>({
-  email: [isRequired(), isEmail()],
-  password: [isRequired(), minCharacters(6, 'Password')]
+  email: [required(), email()],
+  password: [required(), min(6, 'Password')]
 })
 
 const submitForm = async () => {
-  const isValid = await formInstance.value?.validate()
-  if (isValid) {
-    const userCredential = await signInWithEmailAndPassword(auth, formModel.email, formModel.password)
+  try {
+    loading.value = true
+    const isValid = await formInstance.value?.validate()
+    if (isValid) {
+      const userCredential = await signInWithEmailAndPassword(auth, formModel.email, formModel.password)
 
-    if (userCredential) {
-      router.push({ path: '/' })
+      if (userCredential) {
+        router.push({ path: '/' })
+      }
     }
+  } catch (e) {
+    console.log(e)
+  } finally {
+    loading.value = false
   }
 }
 </script>
 
 <template>
-  <div class="max-w-lg mx-auto py-10">
+  <div v-loading.fullscreen.lock="loading" class="max-w-lg mx-auto py-10">
     <el-form ref="formInstance" :model="formModel" :rules="rules" label-position="top" require-asterisk-position="right" @submit.prevent>
       <el-form-item prop="email" label="Email">
         <el-input v-model="formModel.email" autocomplete="false" />
@@ -47,7 +57,7 @@ const submitForm = async () => {
       </el-form-item>
       <div class="flex justify-center items-center mb-2">
         <el-button @click="resetForm(formInstance)">Reset</el-button>
-        <el-button @click="submitForm">Login</el-button>
+        <el-button @click="submitForm" type="primary">Login</el-button>
       </div>
       <div class="flex justify-center items-center">
         <router-link to="/register" class="text-center underline hover:text-blue-400 transition duration-100 ease-linear">Don't have an account? Register now</router-link>
