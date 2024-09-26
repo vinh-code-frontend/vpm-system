@@ -31,3 +31,4 @@ coverage
 
 .env.development
 package-lock.json
+firestore.rules
