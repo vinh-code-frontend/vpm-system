@@ -1,7 +1,6 @@
 import type { FormItemRule } from 'element-plus'
-import { computed } from 'vue'
 
-export const useValidator = () => {
+const useValidator = () => {
   const required = (message?: string): FormItemRule => ({
     required: true,
     message: message || 'This is required field. Please enter value to process'
@@ -24,3 +23,5 @@ export const useValidator = () => {
 
   return { required, email, min, max }
 }
+
+export default useValidator

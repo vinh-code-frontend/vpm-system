@@ -7,8 +7,8 @@ const globalStore = useSiteConfig()
 </script>
 
 <template>
-  <el-config-provider size="large">
-    <div v-loading.fullscreen.lock="globalStore.globalLoading" class="min-h-screen">
+  <el-config-provider size="default">
+    <div v-loading.fullscreen.lock="globalStore.loading" class="min-h-screen">
       <router-view />
     </div>
   </el-config-provider>

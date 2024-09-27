@@ -2,21 +2,21 @@ import { defineStore } from 'pinia'
 
 namespace Store {
   export type State = {
-    globalLoading: boolean
+    loading: boolean
   }
   export type Getter = {}
   export type Action = {
-    setGlobalLoading(payload: boolean): void
+    setLoading(payload: boolean): void
   }
 }
 
 export const useSiteConfig = defineStore<'siteConfig', Store.State, Store.Getter, Store.Action>('siteConfig', {
   state: () => ({
-    globalLoading: true
+    loading: false
   }),
   actions: {
-    setGlobalLoading(payload: boolean) {
-      this.globalLoading = payload
+    setLoading(payload: boolean) {
+      this.loading = payload
     }
   }
 })

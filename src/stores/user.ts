@@ -8,20 +8,21 @@ export namespace UserStoreType {
   export type Getter = {}
   export type Action = {
     setLoginUser(payload: User): void
+    removeLoginUser(): void
   }
 }
 
-export const useUserStore = defineStore<'user', UserStoreType.State, UserStoreType.Getter, UserStoreType.Action>(
-  'user',
-  {
-    state: () => ({
-      loginUser: null
-    }),
-    getters: {},
-    actions: {
-      setLoginUser(payload: User) {
-        this.loginUser = payload
-      }
+export const useUserStore = defineStore<'user', UserStoreType.State, UserStoreType.Getter, UserStoreType.Action>('user', {
+  state: () => ({
+    loginUser: null
+  }),
+  getters: {},
+  actions: {
+    setLoginUser(payload: User) {
+      this.loginUser = payload
+    },
+    removeLoginUser() {
+      this.loginUser = null
     }
   }
-)
+})

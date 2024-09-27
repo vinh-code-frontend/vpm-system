@@ -1,3 +1,4 @@
-import { useValidator } from './useValidator'
+import useValidator from './useValidator'
+import useFirestore from './useFirestore'
 
-export { useValidator }
+export { useValidator, useFirestore }

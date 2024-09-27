@@ -1,5 +1,4 @@
-import { createRouter, createWebHistory, type RouteLocationNormalizedLoadedGeneric } from 'vue-router'
-import { useSiteConfig } from '@/stores/siteConfig'
+import { createRouter, createWebHistory } from 'vue-router'
 import DashboardLayout from '../layout/DashboardLayout.vue'
 import { auth } from '@/firebase'
 
@@ -34,25 +33,17 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../layout/LoginLayout.vue')
+      component: () => import('@/views/Auth/LoginView.vue')
     },
     {
       path: '/register',
       name: 'register',
-      component: () => import('../layout/RegisterLayout.vue')
+      component: () => import('@/views/Auth/RegisterView.vue')
     }
   ]
 })
 
-const isFirstTimeAccessApp = (from: RouteLocationNormalizedLoadedGeneric): boolean => {
-  return from.name === undefined
-}
-
 router.beforeEach(async (to, from, next) => {
-  const store = useSiteConfig()
-  if (isFirstTimeAccessApp(from)) {
-    store.setGlobalLoading(true)
-  }
   await auth.authStateReady()
   const user = auth.currentUser
   if (to.meta.isRequiresAuth && !user) {
@@ -70,7 +61,6 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   next()
-  store.setGlobalLoading(false)
 })
 
 export default router

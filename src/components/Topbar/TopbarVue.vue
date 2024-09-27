@@ -4,10 +4,12 @@ import { computed, ref } from 'vue'
 import { ElDropdown, ElDropdownItem, ElDropdownMenu } from 'element-plus'
 import { Setting, User, SwitchButton } from '@element-plus/icons-vue'
 import { signOut } from 'firebase/auth'
+import { useUserStore } from '@/stores/user'
 
+const store = useUserStore()
 const dropdownRef = ref<InstanceType<typeof ElDropdown>>()
 
-const displayName = computed(() => auth.currentUser?.displayName ?? auth.currentUser?.email)
+const displayName = computed<string>(() => store.loginUser?.displayName ?? '')
 const userId = computed(() => auth.currentUser?.uid)
 
 const onDropdownClicked = () => {
@@ -17,14 +19,13 @@ const onDropdownClicked = () => {
 
 const onLogOut = async () => {
   await signOut(auth)
+  store.removeLoginUser()
   location.reload()
 }
 </script>
 
 <template>
-  <div
-    class="h-[50px] border-[--el-border-color] border-b border-solid flex items-center justify-between leading-none gap-2"
-  >
+  <div class="h-[50px] border-[--el-border-color] border-b border-solid flex items-center justify-between leading-none gap-2 px-4">
     <div></div>
     <el-dropdown ref="dropdownRef" trigger="click">
       <span class="el-dropdown-link">
