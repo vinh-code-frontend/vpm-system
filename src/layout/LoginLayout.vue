@@ -48,19 +48,31 @@ const submitForm = async () => {
 
 <template>
   <div v-loading.fullscreen.lock="loading" class="max-w-lg mx-auto py-10">
-    <el-form ref="formInstance" :model="formModel" :rules="rules" label-position="top" require-asterisk-position="right" @submit.prevent>
+    <el-form
+      ref="formInstance"
+      :model="formModel"
+      :rules="rules"
+      label-position="top"
+      require-asterisk-position="right"
+      @submit.prevent
+    >
       <el-form-item prop="email" label="Email">
         <el-input v-model="formModel.email" autocomplete="false" />
       </el-form-item>
       <el-form-item prop="password" label="Password">
-        <el-input type="password" v-model="formModel.password" autocomplete="off" />
+        <el-input v-model="formModel.password" type="password" autocomplete="off" />
       </el-form-item>
       <div class="flex justify-center items-center mb-2">
-        <el-button @click="resetForm(formInstance)">Reset</el-button>
-        <el-button @click="submitForm" type="primary">Login</el-button>
+        <el-button @click="resetForm(formInstance)"> Reset </el-button>
+        <el-button type="primary" @click="submitForm"> Login </el-button>
       </div>
       <div class="flex justify-center items-center">
-        <router-link to="/register" class="text-center underline hover:text-blue-400 transition duration-100 ease-linear">Don't have an account? Register now</router-link>
+        <router-link
+          to="/register"
+          class="text-center underline hover:text-blue-400 transition duration-100 ease-linear"
+        >
+          Don't have an account? Register now
+        </router-link>
       </div>
     </el-form>
   </div>

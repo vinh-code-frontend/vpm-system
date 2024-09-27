@@ -2,7 +2,13 @@
 import { useValidator } from '@/hooks'
 import { ElForm, ElFormItem, ElInput, type FormInstance, type FormRules, ElButton, vLoading } from 'element-plus'
 import { onMounted, reactive, ref } from 'vue'
-import { signInWithEmailAndPassword, updateProfile, createUserWithEmailAndPassword, deleteUser, onAuthStateChanged } from 'firebase/auth'
+import {
+  signInWithEmailAndPassword,
+  updateProfile,
+  createUserWithEmailAndPassword,
+  deleteUser,
+  onAuthStateChanged
+} from 'firebase/auth'
 import { auth, db } from '@/firebase'
 import { useRouter } from 'vue-router'
 import { doc, setDoc } from 'firebase/firestore'
@@ -79,7 +85,14 @@ const submitForm = async () => {
 
 <template>
   <div v-loading.fullscreen.lock="loading" class="max-w-lg mx-auto py-10">
-    <el-form ref="formInstance" :model="formModel" :rules="rules" label-position="top" require-asterisk-position="right" @submit.prevent>
+    <el-form
+      ref="formInstance"
+      :model="formModel"
+      :rules="rules"
+      label-position="top"
+      require-asterisk-position="right"
+      @submit.prevent
+    >
       <el-form-item prop="displayName" label="Your Name">
         <el-input v-model="formModel.displayName" />
       </el-form-item>
@@ -87,17 +100,19 @@ const submitForm = async () => {
         <el-input v-model="formModel.email" />
       </el-form-item>
       <el-form-item prop="password" label="Password">
-        <el-input type="password" v-model="formModel.password" />
+        <el-input v-model="formModel.password" type="password" />
       </el-form-item>
       <el-form-item prop="confirmPassword" label="Confirm Password">
-        <el-input type="password" v-model="formModel.confirmPassword" />
+        <el-input v-model="formModel.confirmPassword" type="password" />
       </el-form-item>
       <div class="flex justify-center items-center mb-2">
         <el-button @click="resetForm(formInstance)">Reset</el-button>
-        <el-button @click="submitForm" type="primary">Register</el-button>
+        <el-button type="primary" @click="submitForm">Register</el-button>
       </div>
       <div class="flex justify-center items-center">
-        <router-link to="/login" class="text-center underline hover:text-blue-400 transition duration-100 ease-linear">Have an account? Login now</router-link>
+        <router-link to="/login" class="text-center underline hover:text-blue-400 transition duration-100 ease-linear">
+          Have an account? Login now
+        </router-link>
       </div>
     </el-form>
   </div>
