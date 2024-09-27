@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import { useValidator } from '@/hooks'
 import { ElForm, ElFormItem, ElInput, type FormInstance, type FormRules, ElButton, vLoading } from 'element-plus'
-import { onMounted, reactive, ref } from 'vue'
-import {
-  signInWithEmailAndPassword,
-  updateProfile,
-  createUserWithEmailAndPassword,
-  deleteUser,
-  onAuthStateChanged
-} from 'firebase/auth'
+import { reactive, ref } from 'vue'
+import { updateProfile, createUserWithEmailAndPassword } from 'firebase/auth'
 import { auth, db } from '@/firebase'
 import { useRouter } from 'vue-router'
 import { doc, setDoc } from 'firebase/firestore'
 import type { FirebaseError } from 'firebase/app'
 import { ErrorNotification, SuccessNotification } from '@/utils/notification'
 import { resetForm } from '@/utils/form'
+import { v4 as uuidv4 } from 'uuid'
+import { useUserStore } from '@/stores/user'
 
 type SignUpModel = {
   email: string
@@ -25,6 +21,7 @@ type SignUpModel = {
 
 const router = useRouter()
 const { required, email, min } = useValidator()
+const userStore = useUserStore()
 
 const loading = ref(false)
 const formInstance = ref<FormInstance>()
@@ -61,9 +58,24 @@ const submitForm = async () => {
     if (isValid) {
       const userCredential = await createUserWithEmailAndPassword(auth, formModel.email, formModel.password)
       if (userCredential.user) {
-        await setDoc(doc(db, 'users', userCredential.user.uid), {
+        const slug = uuidv4()
+
+        await Promise.all([
+          setDoc(doc(db, 'users', userCredential.user.uid), {
+            displayName: formModel.displayName,
+            email: formModel.email,
+            slug,
+            uid: userCredential.user.uid
+          }),
+          updateProfile(userCredential.user, {
+            displayName: formModel.displayName
+          })
+        ])
+        userStore.setLoginUser({
           displayName: formModel.displayName,
-          email: formModel.email
+          email: formModel.displayName,
+          slug,
+          uid: userCredential.user.uid
         })
         SuccessNotification(`Registration successful! Welcome ${formModel.displayName}`)
         router.push({ path: '/' })
@@ -93,11 +105,11 @@ const submitForm = async () => {
       require-asterisk-position="right"
       @submit.prevent
     >
-      <el-form-item prop="displayName" label="Your Name">
-        <el-input v-model="formModel.displayName" />
-      </el-form-item>
       <el-form-item prop="email" label="Email">
-        <el-input v-model="formModel.email" />
+        <el-input v-model="formModel.email" type="email" />
+      </el-form-item>
+      <el-form-item prop="displayName" label="Your Name">
+        <el-input v-model="formModel.displayName" type="text" />
       </el-form-item>
       <el-form-item prop="password" label="Password">
         <el-input v-model="formModel.password" type="password" />

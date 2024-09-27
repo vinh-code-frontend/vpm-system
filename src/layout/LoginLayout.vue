@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { auth } from '@/firebase'
+import { auth, db } from '@/firebase'
 import { useValidator } from '@/hooks'
 import { ElForm, ElFormItem, ElInput, type FormInstance, type FormRules, ElButton, vLoading } from 'element-plus'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { resetForm } from '@/utils/form'
+import { doc, getDoc } from 'firebase/firestore'
+import { useUserStore } from '@/stores/user'
+import { SuccessNotification } from '@/utils/notification'
+import type { User } from '@/types/User'
 
 type SignInModel = {
   email: string
@@ -13,6 +17,7 @@ type SignInModel = {
 }
 const router = useRouter()
 const { required, email, min } = useValidator()
+const userStore = useUserStore()
 
 const loading = ref(false)
 const formInstance = ref<FormInstance>()
@@ -33,8 +38,20 @@ const submitForm = async () => {
     const isValid = await formInstance.value?.validate()
     if (isValid) {
       const userCredential = await signInWithEmailAndPassword(auth, formModel.email, formModel.password)
+      if (userCredential.user) {
+        const docSnap = await getDoc(doc(db, 'users', userCredential.user.uid))
+        const user = docSnap.data() as User | undefined
+        if (user) {
+          userStore.setLoginUser({
+            displayName: user.displayName,
+            email: user.email,
+            slug: user.slug,
+            uid: user.uid
+          })
+        }
 
-      if (userCredential) {
+        SuccessNotification(`Login successful! Welcome`)
+
         router.push({ path: '/' })
       }
     }

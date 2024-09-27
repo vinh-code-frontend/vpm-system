@@ -15,8 +15,8 @@ const router = createRouter({
       },
       children: [
         {
-          path: '/me',
-          name: 'me',
+          path: '/user/:userId',
+          name: 'user',
           component: () => import('../views/User/YourProfile.vue')
         },
         {
@@ -55,7 +55,6 @@ router.beforeEach(async (to, from, next) => {
   }
   await auth.authStateReady()
   const user = auth.currentUser
-  console.log(user)
   if (to.meta.isRequiresAuth && !user) {
     next({ path: '/login' })
     return
