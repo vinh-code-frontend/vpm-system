@@ -11,7 +11,7 @@ import { ElScrollbar, ElMenu, ElMenuItem, ElIcon } from 'element-plus'
           <el-icon><setting /></el-icon>
           <template #title>Navigator Four</template>
         </el-menu-item>
-        <el-menu-item index="user-management">
+        <el-menu-item index="/user-management">
           <el-icon><Lock /></el-icon>
           <template #title>User Management</template>
         </el-menu-item>

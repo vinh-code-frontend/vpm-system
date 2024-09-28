@@ -83,7 +83,7 @@ const submitForm = async () => {
       }
     }
   } catch (e) {
-    console.log(e)
+    console.error(e)
     const error = e as FirebaseError
     let errorMessage: string = ''
     if (error.code === 'auth/email-already-in-use') {
@@ -96,7 +96,10 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <auth-layout>
+  <auth-layout redirect-link="/login" redirect-placeholder="Have an account? Login now">
+    <template #header>
+      <div class="font-playpen-600 text-3xl text-center">Register</div>
+    </template>
     <el-form ref="formInstance" :model="formModel" :rules="rules" label-position="top" require-asterisk-position="right" @submit.prevent>
       <el-form-item prop="email" label="Email">
         <el-input v-model="formModel.email" type="email" />
@@ -113,11 +116,6 @@ const submitForm = async () => {
       <div class="flex justify-center items-center mb-2">
         <el-button @click="resetForm(formInstance)">Reset</el-button>
         <el-button type="primary" @click="submitForm">Register</el-button>
-      </div>
-      <div class="flex justify-center items-center">
-        <router-link to="/login" class="text-center underline hover:text-blue-400 transition duration-100 ease-linear">
-          Have an account? Login now
-        </router-link>
       </div>
     </el-form>
   </auth-layout>

@@ -63,7 +63,7 @@ const submitForm = async () => {
 </script>
 
 <template>
-  <auth-layout>
+  <auth-layout header="Login" redirect-link="/register" redirect-placeholder="Don't have an account? Register now">
     <el-form ref="formInstance" :model="formModel" :rules="rules" label-position="top" require-asterisk-position="right" @submit.prevent>
       <el-form-item prop="email" label="Email">
         <el-input v-model="formModel.email" autocomplete="false" />
@@ -74,11 +74,6 @@ const submitForm = async () => {
       <div class="flex justify-center items-center mb-2">
         <el-button @click="resetForm(formInstance)"> Reset </el-button>
         <el-button type="primary" @click="submitForm"> Login </el-button>
-      </div>
-      <div class="flex justify-center items-center">
-        <router-link to="/register" class="text-center underline hover:text-blue-400 transition duration-100 ease-linear">
-          Don't have an account? Register now
-        </router-link>
       </div>
     </el-form>
   </auth-layout>

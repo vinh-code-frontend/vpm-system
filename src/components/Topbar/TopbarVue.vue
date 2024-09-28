@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { auth } from '@/firebase'
-import { computed, ref } from 'vue'
-import { ElDropdown, ElDropdownItem, ElDropdownMenu } from 'element-plus'
+import { computed, onMounted, ref } from 'vue'
+import { ElDropdown, ElDropdownItem, ElDropdownMenu, ElIcon } from 'element-plus'
 import { Setting, User, SwitchButton } from '@element-plus/icons-vue'
 import { signOut } from 'firebase/auth'
 import { useUserStore } from '@/stores/user'
@@ -9,11 +9,10 @@ import { useUserStore } from '@/stores/user'
 const store = useUserStore()
 const dropdownRef = ref<InstanceType<typeof ElDropdown>>()
 
-const displayName = computed<string>(() => store.loginUser?.displayName ?? '')
-const userId = computed(() => auth.currentUser?.uid)
+const displayName = computed<string>(() => 'Welcome, ' + (store.loginUser?.displayName ?? ''))
+const slug = computed(() => store.loginUser?.slug)
 
 const onDropdownClicked = () => {
-  console.log('click')
   dropdownRef.value?.handleClose()
 }
 
@@ -22,6 +21,8 @@ const onLogOut = async () => {
   store.removeLoginUser()
   location.reload()
 }
+
+onMounted(() => {})
 </script>
 
 <template>
@@ -33,17 +34,32 @@ const onLogOut = async () => {
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item :icon="User">
-            <router-link :to="`/user/${userId ?? ''}`" @click="onDropdownClicked">Your profile</router-link>
+          <el-dropdown-item>
+            <router-link :to="`/user/${slug}`" class="flex items-center px-3 py-1" @click="onDropdownClicked">
+              <el-icon><user /></el-icon>
+              <span>Your profile</span>
+            </router-link>
           </el-dropdown-item>
-          <el-dropdown-item :icon="Setting">
-            <router-link to="/settings" @click="onDropdownClicked">Settings</router-link>
+          <el-dropdown-item>
+            <router-link to="/settings" class="flex items-center px-3 py-1" @click="onDropdownClicked">
+              <el-icon><setting /></el-icon>
+              <span>Settings</span>
+            </router-link>
           </el-dropdown-item>
-          <el-dropdown-item divided :icon="SwitchButton" @click="onLogOut">Log out</el-dropdown-item>
+          <el-dropdown-item divided @click="onLogOut">
+            <div class="flex items-center px-3 py-1">
+              <el-icon><switch-button /></el-icon>
+              <span>Log out</span>
+            </div>
+          </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(.el-dropdown-menu__item) {
+  padding: 0;
+}
+</style>
