@@ -1,56 +1,99 @@
 <script setup lang="ts">
 import { useFirestore } from '@/hooks'
 import { useUserStore } from '@/stores/user'
-import { ElCard, ElAvatar, ElRow, ElCol, ElUpload, type UploadFile, type UploadUserFile, type UploadProps } from 'element-plus'
-import { computed, onMounted, ref } from 'vue'
+import { ElCard, ElRow, ElCol, ElButton, ElIcon, ElUpload, type UploadFile } from 'element-plus'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { UserFilled } from '@element-plus/icons-vue'
+import UserAvatar from '@/components/UserAvatar.vue'
+import type { User } from '@/types/User'
+import { where } from 'firebase/firestore'
+import { CameraFilled } from '@element-plus/icons-vue'
+import { ErrorNotification } from '@/utils/notification'
+import { getDownloadURL, ref as storageRef, uploadBytesResumable } from 'firebase/storage'
+import { auth, storage } from '@/firebase'
+import { getAuth, updateProfile } from 'firebase/auth'
 
 const route = useRoute()
 const store = useUserStore()
-const { getItems } = useFirestore()
+const { getItemByQuery } = useFirestore()
 
-const uploadRef = ref<InstanceType<typeof ElUpload>>()
+const currentUser = ref<User>()
+const photoUrl = ref<string | undefined>(undefined)
 
 const isLoginUser = computed<boolean>(() => (store.loginUser ? route.params.userId === store.loginUser?.slug : false))
 const profileHeader = computed(() => (isLoginUser.value ? 'Your Profile' : "User's profile"))
-const projectHeader = computed(() => (isLoginUser.value ? 'Your Projects' : "User's projects"))
+const projectHeader = computed(() => (isLoginUser.value ? 'Project' : 'Project'))
 
-const uploadedFile = ref<UploadFile | null>(null)
+const loading = ref(true)
+
 const onUploadChange = async (uploadFile: UploadFile) => {
-  console.log(uploadFile)
-  if (uploadedFile.value) {
-    uploadRef.value?.handleRemove(uploadedFile.value)
+  if (!auth.currentUser || !isLoginUser.value) {
+    return
   }
-  uploadedFile.value = uploadFile
-  const url = URL.createObjectURL(uploadFile.raw as Blob)
-  console.log(url)
-  uploadAvatar.value = url
+  if (!uploadFile.raw) {
+    ErrorNotification('Failed to upload avatar!')
+    return
+  }
+  const url = URL.createObjectURL(uploadFile.raw)
+
+  const storageReference = storageRef(storage, `uploads/${uploadFile.name}`)
+  const uploadTask = await uploadBytesResumable(storageReference, uploadFile.raw)
+  const urlLink = await getDownloadURL(uploadTask.ref)
+
+  await updateProfile(auth.currentUser, {
+    photoURL: urlLink
+  })
+  await auth.currentUser.reload()
+
+  console.log(urlLink)
+  photoUrl.value = url
 }
 
-const imageUrl = ref<any>('')
-
-const uploadAvatar = ref<string>('')
-onMounted(() => {
-  console.log(route)
-  console.log(store.loginUser?.slug)
+onMounted(async () => {
+  if (route.params.userId && typeof route.params.userId === 'string') {
+    if (route.params.userId === store.loginUser?.slug) {
+      currentUser.value = store.loginUser
+    } else {
+      const otherUser = await getItemByQuery<User>('users', where('slug', '==', route.params.userId))
+      if (otherUser) {
+        currentUser.value = otherUser
+      }
+    }
+  }
+  photoUrl.value = currentUser.value?.photoURL
+  console.log(currentUser.value)
+  loading.value = false
 })
 </script>
 
 <template>
-  <el-row :gutter="8">
+  <el-row v-if="currentUser" :gutter="8">
     <el-col :span="10" :xs="24" class="pb-2 md:pb-0">
       <el-card shadow="never">
         <template #header>
-          <h3 class="font-bold text-lg">{{ profileHeader }}</h3>
+          <div class="flex justify-between gap-2">
+            <h3 class="font-bold text-lg">{{ profileHeader }}</h3>
+            <el-upload :auto-upload="false" accept="image/*" :show-file-list="false" action="''" :on-change="onUploadChange">
+              <el-button type="success" plain class="bottom-0 right-0">
+                <el-icon><CameraFilled /></el-icon><span> Update Avatar</span>
+              </el-button>
+            </el-upload>
+          </div>
         </template>
-        <div class="flex items-center justify-center">
-          <el-upload ref="uploadRef" action="''" :auto-upload="false" :on-change="onUploadChange" accept="image/*">
-            <template #file="{}">
-              <img :src="uploadAvatar" />
-            </template>
-            <el-button>Upload</el-button>
-          </el-upload>
+        <div class="flex items-center justify-center relative">
+          <user-avatar
+            :key="photoUrl"
+            v-model="photoUrl"
+            class="w-full overflow-hidden rounded-full text-[54px] max-w-48 aspect-square object-cover"
+          />
+        </div>
+        <div class="flex justify-between gap-2 mt-3">
+          <div class="font-semibold">Display name:</div>
+          <div>{{ currentUser.displayName }}</div>
+        </div>
+        <div class="flex justify-between gap-2">
+          <div class="font-semibold">Email:</div>
+          <div>{{ currentUser.email }}</div>
         </div>
       </el-card>
     </el-col>
@@ -63,6 +106,7 @@ onMounted(() => {
       </el-card>
     </el-col>
   </el-row>
+  <div v-else>There is not specify user</div>
 </template>
 
 <style lang="scss" scoped>

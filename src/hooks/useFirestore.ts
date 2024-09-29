@@ -1,6 +1,6 @@
 import { db } from '@/firebase'
 import { FirestoreCollection } from '@/types/Firestore'
-import { doc, getDoc, getDocs, Query, type DocumentData } from 'firebase/firestore'
+import { doc, getDoc, getDocs, Query, type DocumentData, query, QueryConstraint, collection, limit } from 'firebase/firestore'
 
 const useFirestore = () => {
   const getItems = async <T>(query: Query<DocumentData, DocumentData>): Promise<T[]> => {
@@ -26,9 +26,29 @@ const useFirestore = () => {
     }
   }
 
+  const getItemByQuery = async <T>(collectionName: `${FirestoreCollection}`, ...queryConstraints: QueryConstraint[]): Promise<T | null> => {
+    try {
+      let result: T | null = null
+      const querySnapshop = await getDocs(query(collection(db, collectionName), ...queryConstraints, limit(1)))
+
+      querySnapshop.forEach((item) => {
+        if (item.data()) {
+          result = item.data() as T
+        }
+      })
+      return result
+    } catch (error) {
+      console.error(error)
+      return null
+    }
+  }
+
+  const setItem = async () => {}
+
   return {
     getItems,
-    getItem
+    getItem,
+    getItemByQuery
   }
 }
 

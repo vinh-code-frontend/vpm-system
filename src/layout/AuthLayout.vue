@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useSiteConfig } from '@/stores/siteConfig'
-import { computed, onMounted, withDefaults } from 'vue'
+import { computed, onMounted } from 'vue'
 import { ElCard } from 'element-plus'
 
 withDefaults(

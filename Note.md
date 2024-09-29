@@ -1,0 +1,1 @@
+- Cần gói gọn toàn bộ logic xử lý user vào trong pinia, login, get, set, update

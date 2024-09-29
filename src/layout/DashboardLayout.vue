@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import LeftMenu from '@/components/LeftMenu/LeftMenu.vue'
-import TopbarVue from '@/components/Topbar/TopbarVue.vue'
+import LeftMenu from '@/components/LeftMenu.vue'
+import TopbarVue from '@/components/TopbarVue.vue'
 import { auth } from '@/firebase'
 import { useFirestore } from '@/hooks'
 import { useSiteConfig } from '@/stores/siteConfig'
