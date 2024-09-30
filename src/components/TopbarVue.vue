@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { auth } from '@/firebase'
 import { computed, onMounted, ref } from 'vue'
 import { ElDropdown, ElDropdownItem, ElDropdownMenu, ElIcon } from 'element-plus'
 import { Setting, User, SwitchButton } from '@element-plus/icons-vue'
-import { signOut } from 'firebase/auth'
 import { useUserStore } from '@/stores/user'
 import UserAvatar from './UserAvatar.vue'
 
@@ -17,10 +15,8 @@ const onDropdownClicked = () => {
   dropdownRef.value?.handleClose()
 }
 
-const onLogOut = async () => {
-  await signOut(auth)
-  store.removeLoginUser()
-  location.reload()
+const onLogOut = () => {
+  store.logout()
 }
 
 onMounted(() => {})

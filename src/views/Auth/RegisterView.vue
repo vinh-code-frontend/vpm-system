@@ -2,24 +2,14 @@
 import { useValidator } from '@/hooks'
 import { ElForm, ElFormItem, ElInput, type FormInstance, type FormRules, ElButton } from 'element-plus'
 import { computed, reactive, ref } from 'vue'
-import { updateProfile, createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth, db } from '@/firebase'
 import { useRouter } from 'vue-router'
-import { doc, setDoc } from 'firebase/firestore'
 import type { FirebaseError } from 'firebase/app'
 import { ErrorNotification, SuccessNotification } from '@/utils/notification'
 import { resetForm } from '@/utils/form'
-import { v4 as uuidv4 } from 'uuid'
 import { useUserStore } from '@/stores/user'
 import AuthLayout from '@/layout/AuthLayout.vue'
 import { useSiteConfig } from '@/stores/siteConfig'
-
-type RegisterModel = {
-  email: string
-  password: string
-  confirmPassword: string
-  displayName: string
-}
+import type { RegisterModel } from '@/types/User'
 
 const router = useRouter()
 const { required, email, min } = useValidator()
@@ -57,30 +47,9 @@ const submitForm = async () => {
     store.value.setLoading(true)
     const isValid = await formInstance.value?.validate()
     if (isValid) {
-      const userCredential = await createUserWithEmailAndPassword(auth, formModel.email, formModel.password)
-      if (userCredential.user) {
-        const slug = uuidv4()
-
-        await Promise.all([
-          setDoc(doc(db, 'users', userCredential.user.uid), {
-            displayName: formModel.displayName,
-            email: formModel.email,
-            slug,
-            uid: userCredential.user.uid
-          }),
-          updateProfile(userCredential.user, {
-            displayName: formModel.displayName
-          })
-        ])
-        store.value.setLoginUser({
-          displayName: formModel.displayName,
-          email: formModel.displayName,
-          slug,
-          uid: userCredential.user.uid
-        })
-        SuccessNotification(`Registration successful! Welcome ${formModel.displayName}`)
-        router.push({ path: '/' })
-      }
+      await store.value.register(formModel)
+      SuccessNotification(`Registration successful! Welcome ${formModel.displayName}`)
+      router.push({ path: '/' })
     }
   } catch (e) {
     console.error(e)

@@ -2,24 +2,15 @@
 import LeftMenu from '@/components/LeftMenu.vue'
 import TopbarVue from '@/components/TopbarVue.vue'
 import { auth } from '@/firebase'
-import { useFirestore } from '@/hooks'
-import { useSiteConfig } from '@/stores/siteConfig'
 import { useUserStore } from '@/stores/user'
-import type { User } from '@/types/User'
 import { ElScrollbar, vLoading } from 'element-plus'
 import { onMounted, ref } from 'vue'
 
 const loading = ref(true)
-const { getItem } = useFirestore()
-const store = { ...useUserStore(), ...useSiteConfig() }
+const store = useUserStore()
 
 onMounted(async () => {
-  if (auth.currentUser?.uid) {
-    const user = await getItem<User>('users', auth.currentUser.uid)
-    if (user) {
-      store.setLoginUser(user)
-    }
-  }
+  await store.getLoginUser(auth.currentUser?.uid)
   loading.value = false
 })
 </script>

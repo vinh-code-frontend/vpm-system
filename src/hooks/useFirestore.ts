@@ -1,6 +1,6 @@
 import { db } from '@/firebase'
 import { FirestoreCollection } from '@/types/Firestore'
-import { doc, getDoc, getDocs, Query, type DocumentData, query, QueryConstraint, collection, limit } from 'firebase/firestore'
+import { doc, getDoc, getDocs, Query, type DocumentData, query, QueryConstraint, collection, limit, setDoc } from 'firebase/firestore'
 
 const useFirestore = () => {
   const getItems = async <T>(query: Query<DocumentData, DocumentData>): Promise<T[]> => {
@@ -43,12 +43,16 @@ const useFirestore = () => {
     }
   }
 
-  const setItem = async () => {}
+  const setItem = async <T extends Record<string, any>>(collectionName: `${FirestoreCollection}`, uid: string, payload: T): Promise<T> => {
+    await setDoc(doc(db, collectionName, uid), payload)
+    return payload
+  }
 
   return {
     getItems,
     getItem,
-    getItemByQuery
+    getItemByQuery,
+    setItem
   }
 }
 

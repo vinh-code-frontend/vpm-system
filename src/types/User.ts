@@ -5,3 +5,15 @@ export type User = {
   slug: string
   photoURL?: string
 }
+
+export type LoginModel = {
+  email: string
+  password: string
+}
+
+export type RegisterModel = {
+  email: string
+  password: string
+  confirmPassword: string
+  displayName: string
+}
