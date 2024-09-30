@@ -38,12 +38,12 @@ onMounted(() => {})
               <span>Your profile</span>
             </router-link>
           </el-dropdown-item>
-          <el-dropdown-item>
+          <!-- <el-dropdown-item>
             <router-link to="/settings" class="flex items-center px-3 py-1" @click="onDropdownClicked">
               <el-icon><setting /></el-icon>
               <span>Settings</span>
             </router-link>
-          </el-dropdown-item>
+          </el-dropdown-item> -->
           <el-dropdown-item divided @click="onLogOut">
             <div class="flex items-center px-3 py-1">
               <el-icon><switch-button /></el-icon>

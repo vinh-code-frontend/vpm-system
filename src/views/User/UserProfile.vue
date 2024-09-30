@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useFirestore } from '@/hooks'
 import { useUserStore } from '@/stores/user'
-import { ElCard, ElRow, ElCol, ElButton, ElIcon, ElUpload, type UploadFile } from 'element-plus'
+import { ElCard, ElRow, ElCol, ElButton, ElIcon, ElUpload, type UploadFile, ElDialog } from 'element-plus'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import UserAvatar from '@/components/UserAvatar.vue'
@@ -12,6 +12,7 @@ import { ErrorNotification } from '@/utils/notification'
 import { getDownloadURL, ref as storageRef, uploadBytesResumable } from 'firebase/storage'
 import { auth, storage } from '@/firebase'
 import { getAuth, updateProfile } from 'firebase/auth'
+import EditProfile from '@/components/EditProfile.vue'
 
 const route = useRoute()
 const store = useUserStore()
@@ -25,6 +26,7 @@ const profileHeader = computed(() => (isLoginUser.value ? 'Your Profile' : "User
 const projectHeader = computed(() => (isLoginUser.value ? 'Project' : 'Project'))
 
 const loading = ref(true)
+const editFormVisible = ref(false)
 
 const onUploadChange = async (uploadFile: UploadFile) => {
   if (!auth.currentUser || !isLoginUser.value) {
@@ -47,6 +49,10 @@ const onUploadChange = async (uploadFile: UploadFile) => {
 
   console.log(urlLink)
   photoUrl.value = url
+}
+
+const openEditDialog = () => {
+  editFormVisible.value = true
 }
 
 onMounted(async () => {
@@ -73,11 +79,15 @@ onMounted(async () => {
         <template #header>
           <div class="flex justify-between gap-2">
             <h3 class="font-bold text-lg">{{ profileHeader }}</h3>
-            <el-upload :auto-upload="false" accept="image/*" :show-file-list="false" action="''" :on-change="onUploadChange">
+            <el-button v-if="isLoginUser" type="success" plain class="bottom-0 right-0" @click="openEditDialog">
+              <el-icon><Edit /></el-icon>
+              <span> Edit profile </span>
+            </el-button>
+            <!-- <el-upload :auto-upload="false" accept="image/*" :show-file-list="false" action="''" :on-change="onUploadChange">
               <el-button type="success" plain class="bottom-0 right-0">
                 <el-icon><CameraFilled /></el-icon><span> Update Avatar</span>
               </el-button>
-            </el-upload>
+            </el-upload> -->
           </div>
         </template>
         <div class="flex items-center justify-center relative">
@@ -107,6 +117,17 @@ onMounted(async () => {
     </el-col>
   </el-row>
   <div v-else>There is not specify user</div>
+  <el-dialog
+    v-if="currentUser"
+    v-model="editFormVisible"
+    :destroy-on-close="true"
+    :close-on-click-modal="false"
+    title="Edit profile"
+    append-to-body
+    class="!w-full max-w-[800px]"
+  >
+    <edit-profile v-model="editFormVisible" :user="currentUser" />
+  </el-dialog>
 </template>
 
 <style lang="scss" scoped>
