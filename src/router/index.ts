@@ -10,34 +10,69 @@ const router = createRouter({
       name: 'home',
       component: DashboardLayout,
       meta: {
-        isRequiresAuth: true
+        isRequiresAuth: true,
+        title: 'Home'
+      },
+      redirect: () => {
+        return { path: '/overview' }
       },
       children: [
         {
+          path: '/overview',
+          name: 'overview',
+          meta: {
+            title: 'Overview'
+          },
+          component: () => import('../views/Setting/OverviewView.vue')
+        },
+        {
           path: '/user/:userId',
           name: 'user',
+          meta: {
+            title: 'User'
+          },
           component: () => import('../views/User/UserProfile.vue')
         },
         {
           path: '/settings',
           name: 'settings',
+          meta: {
+            title: 'Settings'
+          },
           component: () => import('../views/User/UserSetting.vue')
         },
         {
           path: '/user-management',
           name: 'user-management',
+          meta: {
+            title: 'User Management'
+          },
           component: () => import('../views/Setting/UserManagement/UserManagement.vue')
+        },
+        {
+          path: '/log-work',
+          name: 'log-work',
+          meta: {
+            title: 'Log work'
+          },
+          component: () => import('../views/Setting/Logwork.vue')
         }
       ]
     },
     {
       path: '/login',
       name: 'login',
+      meta: {
+        title: 'Login'
+      },
       component: () => import('@/views/Auth/LoginView.vue')
     },
     {
       path: '/register',
       name: 'register',
+      meta: {
+        title: 'Register'
+      },
       component: () => import('@/views/Auth/RegisterView.vue')
     }
   ]

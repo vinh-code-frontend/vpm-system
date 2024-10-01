@@ -26,7 +26,7 @@ onMounted(() => {})
   <div class="h-[50px] border-[--el-border-color] border-b border-solid flex items-center justify-between leading-none gap-2 px-4">
     <div></div>
     <el-dropdown ref="dropdownRef" trigger="click">
-      <span class="flex items-center gap-2">
+      <span class="flex items-center gap-2 font-semibold">
         <div>{{ displayName }}</div>
         <user-avatar v-if="store.loginUser" v-model="store.loginUser.photoURL" />
       </span>

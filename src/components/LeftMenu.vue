@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ElScrollbar, ElMenu, ElMenuItem, ElIcon } from 'element-plus'
 import { Files, Notebook, Lock } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+
+const { currentRoute } = useRouter()
 </script>
 
 <template>
   <div class="border-[--el-border-color] border-r border-solid">
     <h3 class="font-playpen-600 px-[--el-menu-level-padding] leading-[--header-height]">VPM System</h3>
     <el-scrollbar class="!h-[calc(100vh-var(--header-height))]">
-      <el-menu default-active="/" class="!border-0 font-semibold" router>
-        <el-menu-item index="/">
+      <el-menu :default-active="currentRoute.path" class="!border-0 font-semibold" router>
+        <el-menu-item index="/overview">
           <el-icon><Files /></el-icon>
           <template #title>Overview</template>
         </el-menu-item>

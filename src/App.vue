@@ -1,6 +1,16 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 import { ElConfigProvider } from 'element-plus'
+import { watch } from 'vue'
+
+const route = useRoute()
+
+watch(
+  () => route.path,
+  () => {
+    document.title = 'VPM System | ' + route.meta.title
+  }
+)
 </script>
 
 <template>
