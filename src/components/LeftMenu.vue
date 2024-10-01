@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { ElScrollbar, ElMenu, ElMenuItem, ElIcon } from 'element-plus'
+import { Files, Notebook, Lock } from '@element-plus/icons-vue'
 </script>
 
 <template>
   <div class="border-[--el-border-color] border-r border-solid">
     <h3 class="font-playpen-600 px-[--el-menu-level-padding] leading-[--header-height]">VPM System</h3>
     <el-scrollbar class="!h-[calc(100vh-var(--header-height))]">
-      <el-menu default-active="/" class="!border-0" router>
+      <el-menu default-active="/" class="!border-0 font-semibold" router>
         <el-menu-item index="/">
-          <el-icon><setting /></el-icon>
-          <template #title>Navigator Four</template>
+          <el-icon><Files /></el-icon>
+          <template #title>Overview</template>
+        </el-menu-item>
+        <el-menu-item index="/log-work">
+          <el-icon><Notebook /></el-icon>
+          <template #title>Log work</template>
         </el-menu-item>
         <el-menu-item index="/user-management">
           <el-icon><Lock /></el-icon>

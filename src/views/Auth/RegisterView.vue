@@ -12,7 +12,7 @@ import { useSiteConfig } from '@/stores/siteConfig'
 import type { RegisterModel } from '@/types/User'
 
 const router = useRouter()
-const { required, email, min } = useValidator()
+const { required, email, min, max } = useValidator()
 const store = computed(() => ({ ...useUserStore(), ...useSiteConfig() }))
 
 const formInstance = ref<FormInstance>()
@@ -24,12 +24,13 @@ const formModel = reactive<RegisterModel>({
 })
 
 const rules = reactive<FormRules<RegisterModel>>({
-  email: [required(), email()],
-  displayName: [required()],
-  password: [required(), min(6, 'Password')],
+  email: [required(), email(), max(100)],
+  displayName: [required(), max(100)],
+  password: [required(), min(6, 'Password'), max(255)],
   confirmPassword: [
     required(),
     min(6, 'Password'),
+    max(255),
     {
       validator(_, value, callback) {
         if (value !== formModel.password) {

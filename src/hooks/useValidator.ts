@@ -18,7 +18,7 @@ const useValidator = () => {
 
   const max = (maxNumber: number, name?: string): FormItemRule => ({
     max: maxNumber,
-    message: `${name || 'The value'} must be least then ${maxNumber} characters`
+    message: `${name || 'The value'} must be least than ${maxNumber} characters`
   })
 
   return { required, email, min, max }

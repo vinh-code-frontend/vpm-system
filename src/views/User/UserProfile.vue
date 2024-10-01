@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import { useFirestore } from '@/hooks'
 import { useUserStore } from '@/stores/user'
-import { ElCard, ElRow, ElCol, ElButton, ElIcon, ElUpload, type UploadFile, ElDialog } from 'element-plus'
-import { computed, onMounted, ref, watch } from 'vue'
+import { ElCard, ElRow, ElCol, ElButton, ElIcon, ElDialog } from 'element-plus'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import UserAvatar from '@/components/UserAvatar.vue'
 import type { User } from '@/types/User'
 import { where } from 'firebase/firestore'
-import { CameraFilled } from '@element-plus/icons-vue'
-import { ErrorNotification } from '@/utils/notification'
-import { getDownloadURL, ref as storageRef, uploadBytesResumable } from 'firebase/storage'
-import { auth, storage } from '@/firebase'
-import { getAuth, updateProfile } from 'firebase/auth'
 import EditProfile from '@/components/EditProfile.vue'
 
 const route = useRoute()
@@ -27,29 +22,6 @@ const projectHeader = computed(() => (isLoginUser.value ? 'Project' : 'Project')
 
 const loading = ref(true)
 const editFormVisible = ref(false)
-
-const onUploadChange = async (uploadFile: UploadFile) => {
-  if (!auth.currentUser || !isLoginUser.value) {
-    return
-  }
-  if (!uploadFile.raw) {
-    ErrorNotification('Failed to upload avatar!')
-    return
-  }
-  const url = URL.createObjectURL(uploadFile.raw)
-
-  const storageReference = storageRef(storage, `uploads/${uploadFile.name}`)
-  const uploadTask = await uploadBytesResumable(storageReference, uploadFile.raw)
-  const urlLink = await getDownloadURL(uploadTask.ref)
-
-  await updateProfile(auth.currentUser, {
-    photoURL: urlLink
-  })
-  await auth.currentUser.reload()
-
-  console.log(urlLink)
-  photoUrl.value = url
-}
 
 const openEditDialog = () => {
   editFormVisible.value = true
@@ -67,7 +39,6 @@ onMounted(async () => {
     }
   }
   photoUrl.value = currentUser.value?.photoURL
-  console.log(currentUser.value)
   loading.value = false
 })
 </script>
@@ -83,11 +54,6 @@ onMounted(async () => {
               <el-icon><Edit /></el-icon>
               <span> Edit profile </span>
             </el-button>
-            <!-- <el-upload :auto-upload="false" accept="image/*" :show-file-list="false" action="''" :on-change="onUploadChange">
-              <el-button type="success" plain class="bottom-0 right-0">
-                <el-icon><CameraFilled /></el-icon><span> Update Avatar</span>
-              </el-button>
-            </el-upload> -->
           </div>
         </template>
         <div class="flex items-center justify-center relative">

@@ -34,7 +34,7 @@ const className = computed<string[] | string>(() => {
     return props.class
   }
   return [
-    `object-cover rounded-full overflow-hidden`, //* Default class
+    `object-cover rounded-full overflow-hidden w-8 h-8`, //* Default class
     getLengthClass.value,
     getFontSizeClass.value
   ]
