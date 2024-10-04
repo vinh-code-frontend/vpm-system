@@ -47,7 +47,7 @@ const router = createRouter({
           meta: {
             title: 'User Management'
           },
-          component: () => import('../views/Setting/UserManagement/UserManagement.vue')
+          component: () => import('../views/Setting/UserManagement.vue')
         },
         {
           path: '/log-work',
@@ -55,7 +55,7 @@ const router = createRouter({
           meta: {
             title: 'Log work'
           },
-          component: () => import('../views/Setting/Logwork.vue')
+          component: () => import('../views/Setting/LogWork.vue')
         }
       ]
     },
@@ -74,6 +74,11 @@ const router = createRouter({
         title: 'Register'
       },
       component: () => import('@/views/Auth/RegisterView.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      redirect: { path: '/' }
     }
   ]
 })
