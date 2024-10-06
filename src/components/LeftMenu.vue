@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElScrollbar, ElMenu, ElMenuItem, ElIcon } from 'element-plus'
-import { Files, Notebook, Lock } from '@element-plus/icons-vue'
+import { Files, Notebook, Lock, Tools, Collection } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 
 const { currentRoute } = useRouter()
@@ -12,8 +12,16 @@ const { currentRoute } = useRouter()
     <el-scrollbar class="!h-[calc(100vh-var(--header-height))]">
       <el-menu :default-active="currentRoute.path" class="!border-0 font-semibold" router>
         <el-menu-item index="/overview">
-          <el-icon><Files /></el-icon>
+          <el-icon><Collection /></el-icon>
           <template #title>Overview</template>
+        </el-menu-item>
+        <el-menu-item index="/project-management">
+          <el-icon><Files /></el-icon>
+          <template #title>Project Management</template>
+        </el-menu-item>
+        <el-menu-item index="/property-management">
+          <el-icon><Tools /></el-icon>
+          <template #title>Property Management</template>
         </el-menu-item>
         <el-menu-item index="/log-work">
           <el-icon><Notebook /></el-icon>

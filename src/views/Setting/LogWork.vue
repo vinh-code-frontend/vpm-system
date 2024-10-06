@@ -1,7 +1,12 @@
-<script setup lang="ts"></script>
+
+<script setup lang="ts">
+
+</script>
 
 <template>
   <div>Log work</div>
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss" scoped>
+
+</style>

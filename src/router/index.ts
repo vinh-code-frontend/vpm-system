@@ -56,6 +56,22 @@ const router = createRouter({
             title: 'Log work'
           },
           component: () => import('../views/Setting/LogWork.vue')
+        },
+        {
+          path: '/project-management',
+          name: 'project-management',
+          meta: {
+            title: 'Project Management'
+          },
+          component: () => import('../views/Setting/ProjectManagement/ProjectManagement.vue')
+        },
+        {
+          path: '/property-management',
+          name: 'property-management',
+          meta: {
+            title: 'Property Management'
+          },
+          component: () => import('../views/Setting/PropertyManagement/PropertyManagement.vue')
         }
       ]
     },
