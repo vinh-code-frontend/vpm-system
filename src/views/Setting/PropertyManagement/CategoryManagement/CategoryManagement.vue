@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import type { ICategory } from '@/types/Property'
-import { Plus } from '@element-plus/icons-vue'
-import { ElTable, ElTableColumn, ElButton, ElTag } from 'element-plus'
+import { ElTable, ElTableColumn, ElButton, ElDrawer } from 'element-plus'
 import { ref } from 'vue'
 import ElementTag from '@/components/ElementPlus/ElementTag.tsx'
 import ManagementLayout from '@/layout/ManagementLayout.vue'
@@ -37,12 +36,13 @@ const deleteCategory = (item: ICategory) => {}
         <template #default="scope">
           <div class="flex items-center">
             <el-button size="small" type="warning" @click="editCategory(scope.row)">Edit</el-button>
-            <el-button size="small" type="danger" @@click="deleteCategory(scope.row)">Delete</el-button>
+            <el-button size="small" type="danger" @click="deleteCategory(scope.row)">Delete</el-button>
           </div>
         </template>
       </el-table-column>
     </el-table>
   </management-layout>
+  <el-drawer></el-drawer>
 </template>
 
 <style lang="scss" scoped></style>

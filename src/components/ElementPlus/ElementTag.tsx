@@ -3,7 +3,7 @@ import { useSlots, type CSSProperties } from 'vue'
 import type { JSX } from 'vue/jsx-runtime'
 import { generateElColor } from '@/utils/color'
 
-const NewTag = (props: Partial<TagProps>): JSX.Element => {
+const ElementTag = (props: Partial<TagProps>): JSX.Element => {
   const slots = useSlots()
   let elStyles: CSSProperties = {}
   if (props.color) {
@@ -19,4 +19,4 @@ const NewTag = (props: Partial<TagProps>): JSX.Element => {
   )
 }
 
-export default NewTag
+export default ElementTag
