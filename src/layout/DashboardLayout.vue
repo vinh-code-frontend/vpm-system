@@ -22,8 +22,12 @@ onMounted(async () => {
     <div class="flex-1 bg-slate-50">
       <topbar-vue />
       <el-scrollbar class="!h-[calc(100vh-var(--header-height))]">
-        <div class="px-4 py-3">
-          <router-view :key="$route.path" />
+        <div class="px-4 py-3 flex !h-[calc(100vh-var(--header-height))]">
+          <div class="relative h-full w-full">
+            <div class="flex-1 absolute inset-0">
+              <router-view :key="$route.path" />
+            </div>
+          </div>
         </div>
       </el-scrollbar>
     </div>

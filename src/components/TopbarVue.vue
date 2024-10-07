@@ -4,11 +4,13 @@ import { ElDropdown, ElDropdownItem, ElDropdownMenu, ElIcon } from 'element-plus
 import { Setting, User, SwitchButton } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores/user'
 import UserAvatar from './UserAvatar.vue'
+import { useSiteConfig } from '@/stores/siteConfig'
 
 const store = useUserStore()
+const config = useSiteConfig()
 const dropdownRef = ref<InstanceType<typeof ElDropdown>>()
 
-const displayName = computed<string>(() => 'Welcome, ' + (store.loginUser?.displayName ?? ''))
+const displayName = computed<string>(() => store.loginUser?.displayName ?? '')
 const slug = computed(() => store.loginUser?.slug)
 
 const onDropdownClicked = () => {
@@ -24,7 +26,17 @@ onMounted(() => {})
 
 <template>
   <div class="h-[50px] border-[--el-border-color] border-b border-solid flex items-center justify-between leading-none gap-2 px-4">
-    <div></div>
+    <div
+      class="cursor-pointer"
+      @click="
+        () => {
+          config.setMenuCollapse(!config.isMenuCollapse)
+        }
+      "
+    >
+      <el-icon v-if="config.isMenuCollapse"><expand /></el-icon>
+      <el-icon v-else><fold /></el-icon>
+    </div>
     <el-dropdown ref="dropdownRef" trigger="click">
       <span class="flex items-center gap-2 font-semibold">
         <div>{{ displayName }}</div>
