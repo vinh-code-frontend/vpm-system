@@ -2,8 +2,8 @@
 import { computed, ref } from 'vue'
 import type { ComponentSize } from 'element-plus'
 import { ElRow, ElCol, ElTabs, ElTabPane } from 'element-plus'
-import TagManagement from '../ProjectManagement/TagManagement/TagManagement.vue'
-import CategoryManagement from '../ProjectManagement/CategoryManagement/CategoryManagement.vue'
+import TagManagement from './TagManagement/TagManagement.vue'
+import CategoryManagement from './CategoryManagement/CategoryManagement.vue'
 
 const selectedTab = ref('tag')
 </script>
