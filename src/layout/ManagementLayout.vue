@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { Plus } from '@element-plus/icons-vue'
-import { ElButton, ElDrawer } from 'element-plus'
-import { ref, useSlots } from 'vue'
-import ElementDrawer from '@/components/ElementPlus/ElementDrawer.vue'
+import { ElButton } from 'element-plus'
+import { useSlots } from 'vue'
 
 const props = defineProps<{
   title?: string
@@ -15,12 +14,9 @@ const emits = defineEmits<{
 
 const clickAddButton = () => {
   emits('click-add-button')
-  isDrawerVisible.value = true
 }
 
 const slots = useSlots()
-
-const isDrawerVisible = ref(false)
 </script>
 
 <template>
@@ -40,7 +36,6 @@ const isDrawerVisible = ref(false)
       <slot name="default"></slot>
     </div>
   </div>
-  <element-drawer v-model="isDrawerVisible"> </element-drawer>
 </template>
 
 <style scoped lang="scss"></style>
