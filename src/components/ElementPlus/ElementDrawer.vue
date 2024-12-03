@@ -37,15 +37,7 @@ defineExpose({
     <div v-loading="loading" class="relative leading-none p-5 h-screen flex flex-col">
       <header class="flex justify-between gap-2 items-center pb-4 border-b border-solid border-[var(--el-border-color)]">
         <div class="font-semibold">{{ props.title }}</div>
-        <el-icon
-          class="cursor-pointer hover:text-[var(--el-color-primary)]"
-          size="large"
-          @click="
-            () => {
-              drawerRef?.handleClose()
-            }
-          "
-        >
+        <el-icon class="cursor-pointer hover:text-[var(--el-color-primary)]" size="large" @click="drawerRef?.handleClose">
           <close />
         </el-icon>
       </header>
