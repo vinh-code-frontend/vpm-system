@@ -18,8 +18,9 @@ export type IProject = {
   ownerId: string
   memberIds: string[]
   name: string
-  shortcut: string
   description: string
+  url?: string
+  shortcut: string
   status: `${ProjectStatus}`
   startDate: Date
   priority: `${Priority}`

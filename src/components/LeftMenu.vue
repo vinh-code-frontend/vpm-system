@@ -14,8 +14,8 @@ const routeMenu = [
     icon: Collection
   },
   {
-    path: '/project-management',
-    title: 'Project Management',
+    path: '/workplace',
+    title: 'Workplace',
     icon: Files
   },
   {

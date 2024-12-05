@@ -58,10 +58,10 @@ const router = createRouter({
           component: () => import('../views/Setting/LogWork.vue')
         },
         {
-          path: '/project-management',
-          name: 'project-management',
+          path: '/workplace',
+          name: 'workplace',
           meta: {
-            title: 'Project Management'
+            title: 'Workplace'
           },
           component: () => import('../views/Setting/ProjectManagement/ProjectManagement.vue')
         },

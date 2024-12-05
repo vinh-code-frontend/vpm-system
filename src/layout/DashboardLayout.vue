@@ -5,9 +5,11 @@ import { auth } from '@/firebase'
 import { useUserStore } from '@/stores/user'
 import { ElScrollbar, vLoading } from 'element-plus'
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
 const loading = ref(true)
 const store = useUserStore()
+const { path } = useRoute()
 
 onMounted(async () => {
   await store.getLoginUser(auth.currentUser?.uid)
@@ -25,7 +27,7 @@ onMounted(async () => {
         <div class="px-4 py-3 flex !h-[calc(100vh-var(--header-height))]">
           <div class="relative h-full w-full">
             <div class="flex-1 absolute inset-0">
-              <router-view :key="$route.path" />
+              <router-view :key="path" />
             </div>
           </div>
         </div>
