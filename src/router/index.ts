@@ -63,7 +63,7 @@ const router = createRouter({
           meta: {
             title: 'Workplace'
           },
-          component: () => import('../views/Setting/ProjectManagement/ProjectManagement.vue')
+          component: () => import('../views/Setting/Workplace/WorkplaceView.vue')
         },
         {
           path: '/property-management',
