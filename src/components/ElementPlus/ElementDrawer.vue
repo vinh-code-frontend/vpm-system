@@ -29,10 +29,12 @@ defineExpose({
   <el-drawer
     ref="drawerRef"
     v-model="model"
+    :v-bind="props"
     :with-header="false"
     destroy-on-close
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
     class="!w-full ssm:!w-120 element-drawer"
-    :v-bind="props"
   >
     <div v-loading="loading" class="relative leading-none p-5 h-screen flex flex-col">
       <header class="flex justify-between gap-2 items-center pb-4 border-b border-solid border-[var(--el-border-color)]">

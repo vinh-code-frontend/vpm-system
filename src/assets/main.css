@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-:root{ 
+:root {
   --header-height: 50px;
+}
+
+body #nprogress .bar {
+  background: var(--el-color-primary);
+  height: 3px;
+}
+
+body #nprogress .bar .peg {
+  box-shadow:
+    0 0 10px var(--el-color-primary),
+    0 0 5px var(--el-color-primary);
 }

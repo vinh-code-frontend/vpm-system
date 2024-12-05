@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import DashboardLayout from '../layout/DashboardLayout.vue'
 import { auth } from '@/firebase'
+import { useNProgress } from '@/hooks/useNProgress'
+
+const { start, done } = useNProgress()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -100,6 +103,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  start()
   await auth.authStateReady()
   const user = auth.currentUser
   if (to.meta.isRequiresAuth && !user) {
@@ -117,6 +121,10 @@ router.beforeEach(async (to, from, next) => {
     }
   }
   next()
+})
+
+router.afterEach(() => {
+  done()
 })
 
 export default router

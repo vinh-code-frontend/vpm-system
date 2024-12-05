@@ -1,11 +1,19 @@
 <script setup lang="ts">
 import ElementDrawer from '@/components/ElementPlus/ElementDrawer.vue'
-import type { ICategory } from '@/types/Property'
+import { IconType, type ICategory } from '@/types/Property'
 import { reactive, ref } from 'vue'
 import { ElButton, ElForm, ElFormItem, type FormInstance, type FormRules, ElInput, ElColorPicker } from 'element-plus'
 import { useValidator } from '@/hooks'
 import _ from 'lodash'
 import { resetForm } from '@/utils/form'
+
+const DEFAULT_CATEGORY = {
+  id: '',
+  name: '',
+  description: '',
+  tagColor: '',
+  iconType: IconType.None
+}
 
 const isDrawerVisible = defineModel<boolean>()
 const props = withDefaults(
@@ -18,7 +26,8 @@ const props = withDefaults(
         id: '',
         name: '',
         description: '',
-        tagColor: ''
+        tagColor: '',
+        iconType: IconType.None
       }
     }
   }
@@ -35,12 +44,7 @@ const rules = reactive<FormRules<ICategory>>({
 })
 
 const initForm = (): ICategory => {
-  return {
-    id: '',
-    name: '',
-    description: '',
-    tagColor: ''
-  }
+  return DEFAULT_CATEGORY
 }
 
 const submitForm = async () => {
@@ -76,6 +80,7 @@ const onComponentBeforeUnmount = () => {
         <el-form-item prop="tagColor" label="Tag color">
           <el-color-picker v-model="formModel.tagColor" />
         </el-form-item>
+        <el-form-item prop="iconType"> </el-form-item>
       </el-form>
     </div>
     <template #footer>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ICategory } from '@/types/Property'
+import { IconType, type ICategory } from '@/types/Property'
 import { ElTable, ElTableColumn, ElButton, ElDrawer } from 'element-plus'
 import { ref } from 'vue'
 import ElementTag from '@/components/ElementPlus/ElementTag.tsx'
@@ -12,7 +12,8 @@ const tableData = ref<ICategory[]>([
     description:
       'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum ipsum quae itaque quod molestias earum modi officiis doloremque ea,',
     name: 'Category 1',
-    tagColor: '#a164df'
+    tagColor: '#a164df',
+    iconType: IconType.None
   }
 ])
 const isDrawerVisible = ref(false)

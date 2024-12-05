@@ -25,4 +25,5 @@ export type IProject = {
   startDate: Date
   priority: `${Priority}`
   logoUrl?: string
+  categoryId?: string
 }
