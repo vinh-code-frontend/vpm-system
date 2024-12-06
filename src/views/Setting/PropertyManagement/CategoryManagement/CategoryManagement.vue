@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { IconType, type ICategory } from '@/types/Property'
-import { ElTable, ElTableColumn, ElButton, ElDrawer } from 'element-plus'
-import { ref } from 'vue'
-import ElementTag from '@/components/ElementPlus/ElementTag.tsx'
-import ManagementLayout from '@/layout/ManagementLayout.vue'
-import Categ from '@/components/ElementPlus/ElementDrawer.vue'
-import CategoryForm from './CategoryForm.vue'
+import { IconType, type ICategory } from '@/types/Property';
+import { ElTable, ElTableColumn, ElButton, ElDrawer } from 'element-plus';
+import { ref, unref } from 'vue';
+import ElementTag from '@/components/ElementPlus/ElementTag.tsx';
+import ManagementLayout from '@/layout/ManagementLayout.vue';
+import CategoryForm from './CategoryForm.vue';
+import BaseDrawer from '@/components/ElementPlus/ElementDrawer.vue';
+
 const tableData = ref<ICategory[]>([
   {
     id: '1',
@@ -15,18 +16,33 @@ const tableData = ref<ICategory[]>([
     tagColor: '#a164df',
     iconType: IconType.None
   }
-])
-const isDrawerVisible = ref(false)
-const selectCategory = ref<ICategory>()
+]);
+const isDrawerVisible = ref(false);
+const loading = ref(false);
+const selectCategory = ref<ICategory>();
+const categoryFormRef = ref<InstanceType<typeof CategoryForm>>();
 
 const openDrawer = (payload?: ICategory) => {
-  isDrawerVisible.value = true
-  selectCategory.value = payload
-}
+  console.log(payload);
+  isDrawerVisible.value = true;
+  selectCategory.value = payload;
+};
 
-const editCategory = (item: ICategory) => {}
+const submitForm = async () => {
+  try {
+    loading.value = true;
+    const form = unref(categoryFormRef);
+    await form?.submit();
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
+};
 
-const deleteCategory = (item: ICategory) => {}
+const editCategory = (item: ICategory) => {};
+
+const deleteCategory = (item: ICategory) => {};
 </script>
 
 <template>
@@ -49,7 +65,13 @@ const deleteCategory = (item: ICategory) => {}
       </el-table-column>
     </el-table>
   </management-layout>
-  <category-form v-model="isDrawerVisible" :category="selectCategory" />
+  <base-drawer v-model="isDrawerVisible" :loading="loading" title="Form">
+    <category-form ref="categoryFormRef" :category="selectCategory" />
+    <template #footer>
+      <el-button @click="isDrawerVisible = false">Cancel</el-button>
+      <el-button type="primary" @click="submitForm">Save</el-button>
+    </template>
+  </base-drawer>
 </template>
 
 <style lang="scss" scoped></style>

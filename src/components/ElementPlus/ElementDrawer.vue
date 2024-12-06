@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { Close } from '@element-plus/icons-vue'
-import { ElDrawer, type DrawerProps, ElIcon, vLoading, ElScrollbar } from 'element-plus'
-import { ref, useSlots, type VNode, type Slots } from 'vue'
+import { Close } from '@element-plus/icons-vue';
+import { ElDrawer, type DrawerProps, ElIcon, vLoading, ElScrollbar } from 'element-plus';
+import { ref, useSlots, type VNode, type Slots } from 'vue';
 
 interface IProps extends DrawerProps {
-  loading: boolean
+  loading: boolean;
 }
 
 interface MyComponentSlots extends Slots {
-  default?: () => VNode[]
-  footer?: () => VNode[]
+  default?: () => VNode[];
+  footer?: () => VNode[];
 }
 
-const model = defineModel<boolean>()
+const model = defineModel<boolean>();
 const props = withDefaults(defineProps<Partial<IProps>>(), {
   loading: false
-})
-const slots = useSlots() as MyComponentSlots
+});
+const slots = useSlots() as MyComponentSlots;
 
-const drawerRef = ref<InstanceType<typeof ElDrawer>>()
+const drawerRef = ref<InstanceType<typeof ElDrawer>>();
 
 defineExpose({
   drawerRef
-})
+});
 </script>
 
 <template>
