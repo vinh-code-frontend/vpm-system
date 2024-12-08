@@ -2,7 +2,7 @@
 import { IconType, type ICategory } from '@/types/Property';
 import { ElTable, ElTableColumn, ElButton, ElDrawer } from 'element-plus';
 import { ref, unref } from 'vue';
-import ElementTag from '@/components/ElementPlus/ElementTag.tsx';
+import BaseTag from '@/components/ElementPlus/BaseTag';
 import ManagementLayout from '@/layout/ManagementLayout.vue';
 import CategoryForm from './CategoryForm.vue';
 import BaseDrawer from '@/components/ElementPlus/ElementDrawer.vue';
@@ -23,7 +23,6 @@ const selectCategory = ref<ICategory>();
 const categoryFormRef = ref<InstanceType<typeof CategoryForm>>();
 
 const openDrawer = (payload?: ICategory) => {
-  console.log(payload);
   isDrawerVisible.value = true;
   selectCategory.value = payload;
 };
@@ -51,7 +50,7 @@ const deleteCategory = (item: ICategory) => {};
       <el-table-column type="index" />
       <el-table-column label="Name" width="180">
         <template #default="scope">
-          <element-tag :color="scope.row.tagColor">{{ scope.row.name }}</element-tag>
+          <base-tag :color="scope.row.tagColor">{{ scope.row.name }}</base-tag>
         </template>
       </el-table-column>
       <el-table-column label="Description" prop="description" min-width="200"></el-table-column>
@@ -65,7 +64,7 @@ const deleteCategory = (item: ICategory) => {};
       </el-table-column>
     </el-table>
   </management-layout>
-  <base-drawer v-model="isDrawerVisible" :loading="loading" title="Form">
+  <base-drawer v-model="isDrawerVisible" :loading="loading" :title="selectCategory ? 'Edit category' : 'Add category'">
     <category-form ref="categoryFormRef" :category="selectCategory" />
     <template #footer>
       <el-button @click="isDrawerVisible = false">Cancel</el-button>

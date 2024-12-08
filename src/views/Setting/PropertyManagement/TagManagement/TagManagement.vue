@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { ITag } from '@/types/Property'
-import { Plus } from '@element-plus/icons-vue'
-import { ElTable, ElTableColumn, ElButton } from 'element-plus'
-import { ref } from 'vue'
-import ManagementLayout from '@/layout/ManagementLayout.vue'
-import ElementTag from '@/components/ElementPlus/ElementTag.tsx'
+import type { ITag } from '@/types/Property';
+import { Plus } from '@element-plus/icons-vue';
+import { ElTable, ElTableColumn, ElButton } from 'element-plus';
+import { ref } from 'vue';
+import ManagementLayout from '@/layout/ManagementLayout.vue';
+import BaseTag from '@/components/ElementPlus/BaseTag.tsx';
 
 const tableData = ref<ITag[]>([
   {
@@ -15,13 +15,13 @@ const tableData = ref<ITag[]>([
     tagColor: '#a164df',
     iconLink: ''
   }
-])
+]);
 
-const openAddDrawer = () => {}
+const openAddDrawer = () => {};
 
-const editTag = (item: ITag) => {}
+const editTag = (item: ITag) => {};
 
-const deleteTag = (item: ITag) => {}
+const deleteTag = (item: ITag) => {};
 </script>
 
 <template>
@@ -31,7 +31,7 @@ const deleteTag = (item: ITag) => {}
       <el-table-column label="Name" prop="name" width="180"></el-table-column>
       <el-table-column label="Tag" width="180">
         <template #default="scope">
-          <element-tag :color="scope.row.tagColor">{{ scope.row.name }}</element-tag>
+          <base-tag :color="scope.row.tagColor">{{ scope.row.name }}</base-tag>
         </template>
       </el-table-column>
       <el-table-column label="Description" prop="description" min-width="200"></el-table-column>

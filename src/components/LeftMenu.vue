@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ElScrollbar, ElMenu, ElMenuItem, ElIcon } from 'element-plus'
-import { Files, Notebook, Lock, Tools, Collection } from '@element-plus/icons-vue'
-import { useRouter } from 'vue-router'
-import { useSiteConfig } from '@/stores/siteConfig'
+import { ElScrollbar, ElMenu, ElMenuItem, ElIcon } from 'element-plus';
+import { Files, Notebook, Lock, Tools, Collection } from '@element-plus/icons-vue';
+import { useRouter } from 'vue-router';
+import { useSiteConfig } from '@/stores/siteConfig';
 
-const { currentRoute, push } = useRouter()
-const config = useSiteConfig()
+const { currentRoute, push } = useRouter();
+const config = useSiteConfig();
 
 const routeMenu = [
   {
@@ -14,8 +14,8 @@ const routeMenu = [
     icon: Collection
   },
   {
-    path: '/workplace',
-    title: 'Workplace',
+    path: '/project-management',
+    title: 'Project Management',
     icon: Files
   },
   {
@@ -33,13 +33,13 @@ const routeMenu = [
     title: 'User Management',
     icon: Lock
   }
-]
+];
 
 const onMenuSelect = (path: string) => {
   if (path) {
-    push(path)
+    push(path);
   }
-}
+};
 </script>
 
 <template>

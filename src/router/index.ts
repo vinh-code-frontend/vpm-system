@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import DashboardLayout from '../layout/DashboardLayout.vue'
-import { auth } from '@/firebase'
-import { useNProgress } from '@/hooks/useNProgress'
+import { createRouter, createWebHistory } from 'vue-router';
+import DashboardLayout from '../layout/DashboardLayout.vue';
+import { auth } from '@/firebase';
+import { useNProgress } from '@/hooks/useNProgress';
 
-const { start, done } = useNProgress()
+const { start, done } = useNProgress();
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,7 +17,7 @@ const router = createRouter({
         title: 'Home'
       },
       redirect: () => {
-        return { path: '/overview' }
+        return { path: '/overview' };
       },
       children: [
         {
@@ -61,12 +61,12 @@ const router = createRouter({
           component: () => import('../views/Setting/LogWork.vue')
         },
         {
-          path: '/workplace',
-          name: 'workplace',
+          path: '/project-management',
+          name: 'ProjectManagement',
           meta: {
-            title: 'Workplace'
+            title: 'ProjectManagement'
           },
-          component: () => import('../views/Setting/Workplace/WorkplaceView.vue')
+          component: () => import('../views/Setting/ProjectManagement/ProjectManagement.vue')
         },
         {
           path: '/property-management',
@@ -100,31 +100,31 @@ const router = createRouter({
       redirect: { path: '/' }
     }
   ]
-})
+});
 
 router.beforeEach(async (to, from, next) => {
-  start()
-  await auth.authStateReady()
-  const user = auth.currentUser
+  start();
+  await auth.authStateReady();
+  const user = auth.currentUser;
   if (to.meta.isRequiresAuth && !user) {
-    next({ path: '/login' })
-    return
+    next({ path: '/login' });
+    return;
   }
   if (user) {
-    const idTokenResult = await user.getIdTokenResult()
+    const idTokenResult = await user.getIdTokenResult();
     if (new Date(idTokenResult.expirationTime) < new Date()) {
-      await user.getIdToken(true)
+      await user.getIdToken(true);
     }
     if (to.name === 'login' || to.name === 'register') {
-      next({ path: from.path })
-      return
+      next({ path: from.path });
+      return;
     }
   }
-  next()
-})
+  next();
+});
 
 router.afterEach(() => {
-  done()
-})
+  done();
+});
 
-export default router
+export default router;
