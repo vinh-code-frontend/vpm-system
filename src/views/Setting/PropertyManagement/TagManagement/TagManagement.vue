@@ -4,7 +4,7 @@ import { Plus } from '@element-plus/icons-vue';
 import { ElTable, ElTableColumn, ElButton } from 'element-plus';
 import { ref } from 'vue';
 import ManagementLayout from '@/layout/ManagementLayout.vue';
-import BaseTag from '@/components/ElementPlus/BaseTag.tsx';
+import BaseTag from '@/components/ElementPlus/BaseTag.vue';
 
 const tableData = ref<ITag[]>([
   {

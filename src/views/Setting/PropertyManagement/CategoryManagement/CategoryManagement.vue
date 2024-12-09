@@ -2,7 +2,7 @@
 import { IconType, type ICategory } from '@/types/Property';
 import { ElTable, ElTableColumn, ElButton, ElDrawer } from 'element-plus';
 import { ref, unref } from 'vue';
-import BaseTag from '@/components/ElementPlus/BaseTag';
+import BaseTag from '@/components/ElementPlus/BaseTag.vue';
 import ManagementLayout from '@/layout/ManagementLayout.vue';
 import CategoryForm from './CategoryForm.vue';
 import BaseDrawer from '@/components/ElementPlus/ElementDrawer.vue';

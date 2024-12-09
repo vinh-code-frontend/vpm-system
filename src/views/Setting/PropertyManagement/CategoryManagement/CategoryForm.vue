@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IconType, type ICategory } from '@/types/Property';
-import { computed, reactive, ref, toRef, watch } from 'vue';
+import { computed, nextTick, reactive, ref, toRef, unref, watch } from 'vue';
 import {
   ElButton,
   ElForm,
@@ -18,7 +18,7 @@ import type { FormInstance, FormRules } from 'element-plus';
 import { useValidator } from '@/hooks';
 import _ from 'lodash';
 import { useSiteConfig } from '@/stores/siteConfig';
-import BaseTag from '@/components/ElementPlus/BaseTag.tsx';
+import BaseTag from '@/components/ElementPlus/BaseTag.vue';
 
 type Props = {
   category?: ICategory;
@@ -38,6 +38,7 @@ const { required, max } = useValidator();
 
 const formModel = toRef(_.cloneDeep(props.category ?? DEFAULT_CATEGORY));
 const formInstance = ref<FormInstance>();
+const elInputNameRef = ref<InstanceType<typeof ElInput>>();
 const editNameMode = ref(!props.category);
 
 const isShowIcon = computed<boolean>(() => !!(formModel.value.iconType === IconType.ElementPlus && formModel.value.icon));
@@ -47,17 +48,21 @@ const rules = reactive<FormRules<ICategory>>({
   description: [required(), max(200)]
 });
 
-const toggleEditNameMode = (mode?: boolean): void => {
+const toggleEditNameMode = async (event: Event, mode?: boolean): Promise<void> => {
   if (typeof mode === 'boolean') {
     editNameMode.value = mode;
   } else {
     editNameMode.value = !editNameMode.value;
   }
+  if (editNameMode.value) {
+    await nextTick();
+    const inputRef = unref(elInputNameRef);
+    inputRef?.focus();
+  }
 };
 
 const submit = async (): Promise<void> => {
   await formInstance.value?.validate();
-  console.log(formModel.value);
 };
 
 watch(
@@ -76,12 +81,12 @@ defineExpose({
   <el-form ref="formInstance" :model="formModel" :rules="rules" size="default" label-position="top" require-asterisk-position="right">
     <el-form-item prop="name" label="Category name">
       <div v-if="!editNameMode" class="flex gap-2 items-center">
-        <base-tag :color="formModel.tagColor" :icon="formModel.icon" :show-icon="isShowIcon">
+        <base-tag :color="formModel.tagColor" :icon="formModel.icon" :show-icon="formModel.iconType">
           <span>{{ formModel.name }}</span>
         </base-tag>
-        <el-icon color="green" class="cursor-pointer" @click="toggleEditNameMode(true)"><Edit /></el-icon>
+        <el-icon color="green" class="cursor-pointer" @click="toggleEditNameMode($event, true)"><Edit /></el-icon>
       </div>
-      <el-input v-if="editNameMode" v-model="formModel.name" @blur="toggleEditNameMode(undefined)" />
+      <el-input v-if="editNameMode" ref="elInputNameRef" v-model="formModel.name" @blur="toggleEditNameMode($event)" />
     </el-form-item>
     <el-form-item prop="description" label="Category description">
       <el-input v-model="formModel.description" type="textarea" :rows="4" />
