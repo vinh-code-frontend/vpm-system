@@ -6,6 +6,7 @@ namespace Store {
     loading: boolean;
     isMenuCollapse: boolean;
     elementIcons: string[];
+    primaryColor: string;
   };
   export type Getter = {};
   export type Action = {
@@ -19,7 +20,8 @@ export const useSiteConfig = defineStore<'siteConfig', Store.State, Store.Getter
   state: () => ({
     loading: false,
     isMenuCollapse: false,
-    elementIcons: []
+    elementIcons: [],
+    primaryColor: '#409eff'
   }),
   actions: {
     setLoading(payload: boolean) {

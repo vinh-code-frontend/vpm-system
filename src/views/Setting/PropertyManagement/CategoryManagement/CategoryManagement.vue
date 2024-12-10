@@ -10,8 +10,7 @@ import BaseDrawer from '@/components/ElementPlus/BaseDrawer.vue';
 const tableData = ref<ICategory[]>([
   {
     id: '1',
-    description:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum ipsum quae itaque quod molestias earum modi officiis doloremque ea,',
+    description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum ipsum quae itaque quod molestias earum modi officiis doloremque ea,',
     name: 'Category 1',
     tagColor: '#a164df',
     iconType: IconType.None

@@ -1,54 +1,47 @@
 <script setup lang="ts">
 import { IconType, type ICategory } from '@/types/Property';
 import { computed, nextTick, reactive, ref, toRef, unref, watch } from 'vue';
-import {
-  ElButton,
-  ElForm,
-  ElFormItem,
-  ElInput,
-  ElColorPicker,
-  ElRadio,
-  ElRadioGroup,
-  ElSelect,
-  ElOption,
-  ElIcon,
-  ElTag
-} from 'element-plus';
+import { ElButton, ElForm, ElFormItem, ElInput, ElColorPicker, ElRadio, ElRadioGroup, ElSelect, ElOption, ElIcon, ElTag } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
-import { useValidator } from '@/hooks';
+import { useFirestore, useValidator } from '@/hooks';
 import _ from 'lodash';
 import { useSiteConfig } from '@/stores/siteConfig';
 import BaseTag from '@/components/ElementPlus/BaseTag.vue';
+import { v4 as uuidv4 } from 'uuid';
 
 type Props = {
   category?: ICategory;
 };
 
+const props = defineProps<Props>();
+
+const store = computed(() => ({ ...useSiteConfig() }));
+
 const DEFAULT_CATEGORY: ICategory = {
   id: '',
   name: '',
   description: '',
-  tagColor: '',
+  tagColor: store.value.primaryColor,
   iconType: IconType.None
 };
-const props = defineProps<Props>();
 
-const store = computed(() => ({ ...useSiteConfig() }));
 const { required, max } = useValidator();
+const { setItem, addItem } = useFirestore();
 
 const formModel = toRef(_.cloneDeep(props.category ?? DEFAULT_CATEGORY));
 const formInstance = ref<FormInstance>();
 const elInputNameRef = ref<InstanceType<typeof ElInput>>();
 const editNameMode = ref(!props.category);
 
-const isShowIcon = computed<boolean>(() => !!(formModel.value.iconType === IconType.ElementPlus && formModel.value.icon));
-
 const rules = reactive<FormRules<ICategory>>({
   name: [required(), max(30)],
   description: [required(), max(200)]
 });
 
-const toggleEditNameMode = async (event: Event, mode?: boolean): Promise<void> => {
+const toggleEditNameMode = async (mode?: boolean): Promise<void> => {
+  if (!formModel.value.name?.trim()) {
+    return;
+  }
   if (typeof mode === 'boolean') {
     editNameMode.value = mode;
   } else {
@@ -62,15 +55,18 @@ const toggleEditNameMode = async (event: Event, mode?: boolean): Promise<void> =
 };
 
 const submit = async (): Promise<void> => {
-  await formInstance.value?.validate();
-};
-
-watch(
-  () => isShowIcon.value,
-  () => {
-    console.log(isShowIcon.value);
+  const isValid = await formInstance.value?.validate();
+  if (!isValid) {
+    return;
   }
-);
+  const temp = { ...formModel.value };
+  if (formModel.value.id) {
+    await setItem('categories', formModel.value.id, temp);
+  } else {
+    temp.id = uuidv4();
+    await addItem('categories', temp);
+  }
+};
 
 defineExpose({
   submit
@@ -84,9 +80,9 @@ defineExpose({
         <base-tag :color="formModel.tagColor" :icon="formModel.icon" :show-icon="formModel.iconType">
           <span>{{ formModel.name }}</span>
         </base-tag>
-        <el-icon color="green" class="cursor-pointer" @click="toggleEditNameMode($event, true)"><Edit /></el-icon>
+        <el-icon color="green" class="cursor-pointer" @click="toggleEditNameMode(true)"><Edit /></el-icon>
       </div>
-      <el-input v-if="editNameMode" ref="elInputNameRef" v-model="formModel.name" @blur="toggleEditNameMode($event)" />
+      <el-input v-if="editNameMode" ref="elInputNameRef" v-model="formModel.name" @blur="() => toggleEditNameMode()" />
     </el-form-item>
     <el-form-item prop="description" label="Category description">
       <el-input v-model="formModel.description" type="textarea" :rows="4" />

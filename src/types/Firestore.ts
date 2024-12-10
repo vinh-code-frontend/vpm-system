@@ -1,4 +1,6 @@
 export enum FirestoreCollection {
   Users = 'users',
-  Projects = 'projects'
+  Projects = 'projects',
+  Categories = 'categories',
+  Tags = 'tags'
 }
