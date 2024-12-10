@@ -5,7 +5,7 @@ import { ref, unref } from 'vue';
 import BaseTag from '@/components/ElementPlus/BaseTag.vue';
 import ManagementLayout from '@/layout/ManagementLayout.vue';
 import CategoryForm from './CategoryForm.vue';
-import BaseDrawer from '@/components/ElementPlus/ElementDrawer.vue';
+import BaseDrawer from '@/components/ElementPlus/BaseDrawer.vue';
 
 const tableData = ref<ICategory[]>([
   {
