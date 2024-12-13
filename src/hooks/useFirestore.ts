@@ -1,14 +1,18 @@
 import { db } from '@/firebase';
 import { FirestoreCollection } from '@/types/Firestore';
-import { doc, getDoc, getDocs, Query, type DocumentData, query, QueryConstraint, collection, limit, setDoc, addDoc } from 'firebase/firestore';
+import { doc, getDoc, getDocs, query, type DocumentData, QueryConstraint, collection, limit, setDoc, addDoc } from 'firebase/firestore';
+import { ref } from 'vue';
 
-const useFirestore = () => {
-  const getItems = async <T>(query: Query<DocumentData, DocumentData>): Promise<T[]> => {
+const useFirestore = (collectionName: `${FirestoreCollection}`) => {
+  const categoreyRef = collection(db, collectionName);
+
+  const getItems = async <T>(): Promise<T[]> => {
     try {
       const result: T[] = [];
-      const querySnapshop = await getDocs(query);
-      querySnapshop.forEach((item) => {
-        result.push(item.data() as T);
+      const querySnapshop = await getDocs(categoreyRef);
+      querySnapshop.forEach((snapshot) => {
+        const temp = { ...snapshot.data(), id: snapshot.id } as T;
+        result.push(temp);
       });
       return result ?? [];
     } catch (error) {
@@ -16,7 +20,7 @@ const useFirestore = () => {
       return [];
     }
   };
-  const getItem = async <T>(collectionName: `${FirestoreCollection}`, uid: string): Promise<T | null> => {
+  const getItem = async <T>(uid: string): Promise<T | null> => {
     try {
       const docSnap = await getDoc(doc(db, collectionName, uid));
       return (docSnap.data() as T) ?? null;
@@ -26,10 +30,10 @@ const useFirestore = () => {
     }
   };
 
-  const getItemByQuery = async <T>(collectionName: `${FirestoreCollection}`, ...queryConstraints: QueryConstraint[]): Promise<T | null> => {
+  const getItemByQuery = async <T>(...queryConstraints: QueryConstraint[]): Promise<T | null> => {
     try {
       let result: T | null = null;
-      const querySnapshop = await getDocs(query(collection(db, collectionName), ...queryConstraints, limit(1)));
+      const querySnapshop = await getDocs(query(categoreyRef, ...queryConstraints, limit(1)));
 
       querySnapshop.forEach((item) => {
         if (item.data()) {
@@ -43,14 +47,15 @@ const useFirestore = () => {
     }
   };
 
-  const setItem = async <T extends Record<string, any>>(collectionName: `${FirestoreCollection}`, uid: string, payload: T): Promise<T> => {
+  const setItem = async <T extends Record<string, any>>(uid: string, payload: T): Promise<T> => {
     await setDoc(doc(db, collectionName, uid), payload);
     return payload;
   };
 
-  const addItem = async <T extends Record<string, any>>(collectionName: `${FirestoreCollection}`, payload: T): Promise<T> => {
-    const data = await addDoc(collection(db, collectionName), payload);
+  const addItem = async <T extends Record<string, any>>(payload: T): Promise<T> => {
+    const data = await addDoc(categoreyRef, payload);
     const result = { ...payload, id: data.id };
+    console.log(data);
     return result;
   };
 

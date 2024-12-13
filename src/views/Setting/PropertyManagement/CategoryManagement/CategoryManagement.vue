@@ -1,25 +1,19 @@
 <script setup lang="ts">
 import { IconType, type ICategory } from '@/types/Property';
 import { ElTable, ElTableColumn, ElButton, ElDrawer } from 'element-plus';
-import { ref, unref } from 'vue';
+import { ref, unref, onMounted } from 'vue';
 import BaseTag from '@/components/ElementPlus/BaseTag.vue';
 import ManagementLayout from '@/layout/ManagementLayout.vue';
 import CategoryForm from './CategoryForm.vue';
 import BaseDrawer from '@/components/ElementPlus/BaseDrawer.vue';
+import { useFirestore } from '@/hooks';
 
-const tableData = ref<ICategory[]>([
-  {
-    id: '1',
-    description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nostrum ipsum quae itaque quod molestias earum modi officiis doloremque ea,',
-    name: 'Category 1',
-    tagColor: '#a164df',
-    iconType: IconType.None
-  }
-]);
+const tableData = ref<ICategory[]>([]);
 const isDrawerVisible = ref(false);
 const loading = ref(false);
 const selectCategory = ref<ICategory>();
 const categoryFormRef = ref<InstanceType<typeof CategoryForm>>();
+const { setItem, getItems: getCategories } = useFirestore('categories');
 
 const openDrawer = (payload?: ICategory) => {
   isDrawerVisible.value = true;
@@ -41,6 +35,12 @@ const submitForm = async () => {
 const editCategory = (item: ICategory) => {};
 
 const deleteCategory = (item: ICategory) => {};
+
+onMounted(async () => {
+  const categories = await getCategories<ICategory>();
+  console.log(categories);
+  tableData.value = categories;
+});
 </script>
 
 <template>

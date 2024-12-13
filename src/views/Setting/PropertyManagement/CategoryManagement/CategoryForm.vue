@@ -26,7 +26,7 @@ const DEFAULT_CATEGORY: ICategory = {
 };
 
 const { required, max } = useValidator();
-const { setItem, addItem } = useFirestore();
+const { setItem, addItem } = useFirestore('categories');
 
 const formModel = toRef(_.cloneDeep(props.category ?? DEFAULT_CATEGORY));
 const formInstance = ref<FormInstance>();
@@ -61,10 +61,9 @@ const submit = async (): Promise<void> => {
   }
   const temp = { ...formModel.value };
   if (formModel.value.id) {
-    await setItem('categories', formModel.value.id, temp);
+    await setItem(formModel.value.id, temp);
   } else {
-    temp.id = uuidv4();
-    await addItem('categories', temp);
+    await addItem(temp);
   }
 };
 
